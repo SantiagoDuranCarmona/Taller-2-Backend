@@ -2,6 +2,7 @@ package culturemedia.repository.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import culturemedia.model.Video;
 import culturemedia.repository.VideoRepository;
@@ -27,26 +28,12 @@ public class VideoRepositoryImpl implements VideoRepository
 
 	@Override
 	public List<Video> find(String title) {
-		List<Video> filteredVideos = null;
-		for ( Video video : videos ) {
-			if(title.equals( video.title() )){
-				if(filteredVideos == null){
-					filteredVideos = new ArrayList<Video>();
-				}
-				filteredVideos.add(video);
-			}
-		}
-		return filteredVideos;
+		return videos.stream().filter(video -> video.title().contains( title )).collect( Collectors.toList() );
 	}
 
 	@Override
 	public List<Video> find(Double fromDuration, Double toDuration) {
-		List<Video> filteredVideos = new ArrayList<Video>();
-		for ( Video video : videos ) {
-			if(video.duration()> fromDuration && video.duration()< toDuration){
-				filteredVideos.add(video);
-			}
-		}
-		return filteredVideos;
+		return videos.stream().filter(video -> video.duration() >= fromDuration && video.duration() <= toDuration)
+							  .collect( Collectors.toList() );
 	}
 }
