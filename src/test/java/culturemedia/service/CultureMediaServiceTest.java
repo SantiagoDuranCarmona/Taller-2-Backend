@@ -55,4 +55,28 @@ class CultureMediaServiceTest
     void when_FindAll_does_not_find_any_video_an_VideoNotFoundException_should_be_thrown_successfully() {
         assertThrows(VideoNotFoundException.class, () -> cultureMediaService.findAll());
     }
+
+    @Test
+    void when_FindByTitle_existing_title_should_return_matching_videos() throws VideoNotFoundException {
+        createVideos();
+        List<Video> videosFound = cultureMediaService.find("title 1");
+        assertEquals(1, videosFound.size());
+    }
+
+    @Test
+    void when_FindByTitle_non_existing_title_should_throw_VideoNotFoundException() {
+        assertThrows(VideoNotFoundException.class, () -> cultureMediaService.find("non-existent title"));
+    }
+
+    @Test
+    void when_FindByDuration_existing_range_should_return_matching_videos() throws VideoNotFoundException {
+        createVideos();
+        List<Video> videosFound = cultureMediaService.find(2.5, 3.5);
+        assertEquals(3, videosFound.size());
+    }
+
+    @Test
+    void when_FindByDuration_non_existing_range_should_throw_VideoNotFoundException() {
+        assertThrows(VideoNotFoundException.class, () -> cultureMediaService.find(5.0, 10.0));
+    }
 }
